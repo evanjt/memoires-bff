@@ -9,23 +9,23 @@ from app.models.user import User
 router = APIRouter()
 
 
-@router.get("/{area_id}")
-async def get_area(
+@router.get("/{event_id}")
+async def get_event(
     client: httpx.AsyncClient = Depends(get_async_client),
     *,
-    area_id: UUID,
+    event_id: UUID,
 ) -> Any:
-    """Get an area by id"""
+    """Get an event by id"""
 
     res = await client.get(
-        f"{config.MEMOIRES_API_URL}/v1/areas/{area_id}",
+        f"{config.MEMOIRES_API_URL}/v1/events/{event_id}",
     )
 
     return res.json()
 
 
 @router.get("")
-async def get_areas(
+async def get_events(
     request: Request,
     response: Response,
     *,
@@ -34,9 +34,9 @@ async def get_areas(
     range: str = None,
     client: httpx.AsyncClient = Depends(get_async_client),
 ) -> Any:
-    """Get all areas"""
+    """Get all events"""
     res = await client.get(
-        f"{config.MEMOIRES_API_URL}/v1/areas",
+        f"{config.MEMOIRES_API_URL}/v1/events",
         params={"sort": sort, "range": range, "filter": filter},
     )
     response.headers["Access-Control-Expose-Headers"] = "Content-Range"
@@ -46,40 +46,42 @@ async def get_areas(
 
 
 @router.post("")
-async def create_area(
-    area: Any = Body(...),
+async def create_event(
+    event: Any = Body(...),
     client: httpx.AsyncClient = Depends(get_async_client),
 ) -> Any:
-    """Creates an area"""
+    """Creates an event"""
 
     res = await client.post(
-        f"{config.MEMOIRES_API_URL}/v1/areas",
-        json=area,
+        f"{config.MEMOIRES_API_URL}/v1/events",
+        json=event,
     )
 
     return res.json()
 
 
-@router.put("/{area_id}")
-async def update_area(
-    area_id: UUID,
-    area: Any = Body(...),
+@router.put("/{event_id}")
+async def update_event(
+    event_id: UUID,
+    event: Any = Body(...),
     client: httpx.AsyncClient = Depends(get_async_client),
 ) -> Any:
-    """ "Updates an area by id"""
+    """ "Updates an event by id"""
 
-    res = await client.put(f"{config.MEMOIRES_API_URL}/v1/areas/{area_id}", json=area)
+    res = await client.put(
+        f"{config.MEMOIRES_API_URL}/v1/events/{event_id}", json=event
+    )
 
     return res.json()
 
 
-@router.delete("/{area_id}")
-async def delete_area(
-    area_id: UUID,
+@router.delete("/{event_id}")
+async def delete_event(
+    event_id: UUID,
     client: httpx.AsyncClient = Depends(get_async_client),
 ) -> None:
-    """Delete an area by id"""
+    """Delete an event by id"""
 
-    res = await client.delete(f"{config.MEMOIRES_API_URL}/v1/areas/{area_id}")
+    res = await client.delete(f"{config.MEMOIRES_API_URL}/v1/events/{event_id}")
 
     return res.json()

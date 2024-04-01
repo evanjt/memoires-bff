@@ -4,7 +4,7 @@ from app.config import config
 from app.models.config import KeycloakConfig
 from app.models.health import HealthCheck
 from app.routes.stations import router as stations_router
-from app.routes.areas import router as areas_router
+from app.routes.events import router as events_router
 
 
 app = FastAPI()
@@ -38,9 +38,9 @@ def get_health() -> HealthCheck:
 
 
 app.include_router(
-    areas_router,
-    prefix=f"{config.API_PREFIX}/areas",
-    tags=["areas"],
+    events_router,
+    prefix=f"{config.API_PREFIX}/events",
+    tags=["events"],
 )
 app.include_router(
     stations_router,
